@@ -8,7 +8,7 @@ Przykład:
 
 ```text
 11199922233475599999
-
+```
 wynikiem będzie:
 
 ```text
@@ -218,16 +218,12 @@ Odpowiedzialność poszczególnych warstw:
 * clients.py - komunikacja z zewnętrznymi API i obsługa błędów na poziomie klienta HTTP.
 * services.py - właściwa logika biznesowa i rozwiązanie problemu rekrutacyjnego.
 * tests.py - testy jednostkowe logiki oraz testy integracyjne endpointów i komunikacji z klientem API.
-```
 
----
 
 ## Uruchamianie testów
-
 ```bash
 pytest
 ```
-
 ## Testowane scenariusze
 
 * poprawne wyszukiwanie najdłuższej sekwencji,
