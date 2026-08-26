@@ -6,11 +6,8 @@ Prosta aplikacja oparta o Django REST Framework rozwiązująca problem wyszukiwa
 
 Przykład:
 
-Dla ciągu:
-
 ```text
 11199922233475599999
-```
 
 wynikiem będzie:
 
@@ -21,23 +18,29 @@ wynikiem będzie:
 ponieważ jest to najdłuższa sekwencja powtarzających się znaków.
 
 ---
+Aplikacja udostępnia dwa sposoby dostarczenia danych:
+
+-POST - ciąg przekazywany bezpośrednio w żądaniu,
+
+-GET - ciąg pobierany z zewnętrznego API.
 
 ## Podejście do rozwiązania
 
-Logika wyszukiwania została wydzielona do warstwy serwisowej (`core/services.py`), dzięki czemu pozostaje niezależna od Django REST Framework i może być testowana w izolacji.
+Projekt został podzielony na kilka prostych warstw odpowiedzialnych za różne elementy przetwarzania:
 
-Algorytm wykonuje pojedyncze przejście po ciągu wejściowym (single-pass scan).
+- core/services.py - logika biznesowa i algorytm wyszukiwania najdłuższej sekwencji.
+- core/clients.py - komunikacja z zewnętrznym API oraz obsługa błędów na poziomie klienta HTTP.
+- core/serializers.py - walidacja danych wejściowych i struktura odpowiedzi API.
+- core/views.py - obsługa żądań HTTP i połączenie poszczególnych elementów.
+- core/tests.py - testy logiki biznesowej, klienta API oraz endpointów.
 
-### Złożoność
-
-* Czasowa: **O(N)**
-* Pamięciowa: **O(1)**
+Taki podział pozwala testować poszczególne elementy niezależnie, bez wprowadzania dodatkowych warstw niewymaganych przez skalę zadania.
 
 ---
 
 ## Endpoint
 
-### POST
+### POST /api/process/
 
 Przetwarza ciąg przekazany w żądaniu.
 
@@ -61,7 +64,7 @@ Przetwarza ciąg przekazany w żądaniu.
 
 ---
 
-### GET
+### GET /api/process/
 
 Pobiera dane z zewnętrznego API wskazanego przez zmienną środowiskową:
 
@@ -70,6 +73,10 @@ EXTERNAL_API_URL
 ```
 
 Następnie analizuje otrzymany ciąg i zwraca wynik w tej samej strukturze co endpoint POST.
+W przypadku problemu z komunikacją z zewnętrznym API endpoint zwraca:
+```text
+502 Bad Gateway
+```
 
 ---
 
@@ -122,8 +129,12 @@ SECRET_KEY=your-secret-key
 EXTERNAL_API_URL=https://twoj-webhook-site-url
 ```
 
-W przypadku uruchamiania tego projektu na potrzeby demonstracyjne w miejsce EXTERNAL_API_URL wklej adres webhooka, który przygotowałem w celach demonstracyjnych:
+Na potrzeby demonstracji projektu można użyć przygotowanego webhooka:
 https://webhook.site/372c2317-2fdc-42ed-a0da-5f236f00fc94
+
+SECRET_KEY można ustawić na dowolną wartość przeznaczoną do lokalnego środowiska demonstracyjnego.
+
+Plik .env nie powinien być commitowany do repozytorium.
 
 ---
 
@@ -145,14 +156,6 @@ Domyślnie:
 
 ```text
 http://127.0.0.1:8000/api/process/
-```
-
----
-
-## Uruchamianie testów
-
-```bash
-pytest
 ```
 
 ---
@@ -184,31 +187,52 @@ ruff format .
 ```text
 drf-find-longest-sequence/
 ├── config/
+│   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
-│   └── ...
+│   ├── asgi.py
+│   └── wsgi.py
 │
 ├── core/
-│   ├── services.py
-│   ├── serializers.py
-│   ├── views.py
-│   ├── urls.py
-│   └── tests.py
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── clients.py       # komunikacja z zewnętrznymi API
+│   ├── models.py
+│   ├── serializers.py   # walidacja danych i struktura odpowiedzi
+│   ├── services.py      # logika biznesowa i algorytm
+│   ├── views.py         # endpointy HTTP
+│   ├── urls.py          # routing aplikacji
+│   └── tests.py         # testy
 │
 ├── .env.example
+├── .gitignore
 ├── manage.py
-├── requirements.txt
 ├── pyproject.toml
+├── requirements.txt
 └── README.md
+```
+Odpowiedzialność poszczególnych warstw:
+-views.py — obsługa żądań HTTP oraz połączenie poszczególnych elementów.
+-serializers.py — walidacja danych wejściowych oraz definiowanie struktury odpowiedzi.
+-clients.py — komunikacja z zewnętrznymi API i obsługa błędów na poziomie klienta HTTP.
+-services.py — właściwa logika biznesowa i rozwiązanie problemu rekrutacyjnego.
+-tests.py — testy jednostkowe logiki oraz testy integracyjne endpointów i komunikacji z klientem API.
 ```
 
 ---
+
+## Uruchamianie testów
+
+```bash
+pytest
+```
 
 ## Testowane scenariusze
 
 * poprawne wyszukiwanie najdłuższej sekwencji,
 * pojedynczy znak,
-* brak powtórzeń,
+* brak powtarzających się znaków,
 * cały ciąg składający się z jednego znaku,
 * pusty ciąg,
 * wartość `None`,
@@ -216,3 +240,5 @@ drf-find-longest-sequence/
 * walidacja błędnych danych wejściowych,
 * poprawna obsługa danych pobranych z zewnętrznego API,
 * obsługa błędów komunikacji z zewnętrznym API.
+
+Zapytania do zewnętrznego API są mockowane w testach, dzięki czemu testy nie wymagają dostępu do rzeczywistego zewnętrznego serwera.
