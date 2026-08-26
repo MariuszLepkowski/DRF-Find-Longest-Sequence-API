@@ -1,6 +1,10 @@
 from unittest.mock import patch
 
-from core.clients import ExternalAPIError
+import pytest
+from rest_framework.test import APIClient
+
+from core.clients import ExternalAPIClient, ExternalAPIError
+from core.services import find_longest_sequence
 
 
 @pytest.mark.parametrize(
@@ -31,6 +35,7 @@ class TestProcessDataAPI:
             data={"raw_sequence": "111999922"},
             format="json",
         )
+
         assert response.status_code == 200
         assert response.data["longest_sequence"] == "9999"
         assert response.data["length"] == 4
@@ -41,41 +46,35 @@ class TestProcessDataAPI:
             data={"raw_sequence": "   "},
             format="json",
         )
+
         assert response.status_code == 400
         assert "raw_sequence" in response.data
 
-    @patch("core.views.ExternalAPIClient.get_data")
-    def test_get_external_api_success(mock_get_data, api_client):
-        mock_get_data.return_value = "7777722"
+    def test_get_external_api_success(self, api_client):
+        with patch("core.views.ExternalAPIClient.get_data") as mock_get_data:
+            mock_get_data.return_value = "7777722"
 
-        response = api_client.get("/api/process/")
+            response = api_client.get("/api/process/")
 
         assert response.status_code == 200
         assert response.data["longest_sequence"] == "77777"
         assert response.data["length"] == 5
 
-    @patch("core.views.ExternalAPIClient.get_data")
-    def test_get_external_api_failure(mock_get_data, api_client):
-        mock_get_data.side_effect = ExternalAPIError
+    def test_get_external_api_failure(self, api_client):
+        with patch("core.views.ExternalAPIClient.get_data") as mock_get_data:
+            mock_get_data.side_effect = ExternalAPIError
 
-        response = api_client.get("/api/process/")
+            response = api_client.get("/api/process/")
 
         assert response.status_code == 502
         assert response.data["error"] == (
             "Failed to retrieve data from external API."
         )
 
+
+class TestExternalAPIClient:
     @patch("core.clients.requests.get")
-    def test_external_api_client(mock_get):
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.text = "7777722"
-
-        client = ExternalAPIClient()
-
-        assert client.get_data() == "7777722"
-
-    @patch("core.clients.requests.get")
-    def test_external_api_client(mock_get):
+    def test_get_data(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.text = "7777722"
 
