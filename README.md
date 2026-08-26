@@ -213,11 +213,11 @@ drf-find-longest-sequence/
 └── README.md
 ```
 Odpowiedzialność poszczególnych warstw:
--views.py — obsługa żądań HTTP oraz połączenie poszczególnych elementów.
--serializers.py — walidacja danych wejściowych oraz definiowanie struktury odpowiedzi.
--clients.py — komunikacja z zewnętrznymi API i obsługa błędów na poziomie klienta HTTP.
--services.py — właściwa logika biznesowa i rozwiązanie problemu rekrutacyjnego.
--tests.py — testy jednostkowe logiki oraz testy integracyjne endpointów i komunikacji z klientem API.
+* views.py - obsługa żądań HTTP oraz połączenie poszczególnych elementów.
+* serializers.py - walidacja danych wejściowych oraz definiowanie struktury odpowiedzi.
+* clients.py - komunikacja z zewnętrznymi API i obsługa błędów na poziomie klienta HTTP.
+* services.py - właściwa logika biznesowa i rozwiązanie problemu rekrutacyjnego.
+* tests.py - testy jednostkowe logiki oraz testy integracyjne endpointów i komunikacji z klientem API.
 ```
 
 ---
