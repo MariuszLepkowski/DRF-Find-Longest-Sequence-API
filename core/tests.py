@@ -67,9 +67,7 @@ class TestProcessDataAPI:
             response = api_client.get("/api/process/")
 
         assert response.status_code == 502
-        assert response.data["error"] == (
-            "Failed to retrieve data from external API."
-        )
+        assert response.data["error"] == ("Failed to retrieve data from external API.")
 
 
 class TestExternalAPIClient:
