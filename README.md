@@ -80,35 +80,20 @@ W przypadku problemu z komunikacją z zewnętrznym API endpoint zwraca:
 
 ---
 
-## Konfiguracja
-
-### 1. Utworzenie środowiska wirtualnego
-
-Linux / macOS:
+## Instalacja
 
 ```bash
-python -m venv .venv
+uv sync
+```
+
+Aktywacja środowiska:
+
+```bash
 source .venv/bin/activate
 ```
-
-Windows:
-
-```powershell
-python -m venv .venv
-.venv\Scripts\activate
-```
-
 ---
 
-### 2. Instalacja zależności
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-### 3. Konfiguracja zmiennych środowiskowych
+### Konfiguracja zmiennych środowiskowych
 
 Utwórz plik:
 
@@ -138,7 +123,7 @@ Plik .env nie powinien być commitowany do repozytorium.
 
 ---
 
-### 4. Migracje
+### Migracje
 
 ```bash
 python manage.py migrate
@@ -146,7 +131,7 @@ python manage.py migrate
 
 ---
 
-### 5. Uruchomienie aplikacji
+### Uruchomienie aplikacji
 
 ```bash
 python manage.py runserver
@@ -209,7 +194,6 @@ drf-find-longest-sequence/
 ├── .gitignore
 ├── manage.py
 ├── pyproject.toml
-├── requirements.txt
 └── README.md
 ```
 Odpowiedzialność poszczególnych warstw:
