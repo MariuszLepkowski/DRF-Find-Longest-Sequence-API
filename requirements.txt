@@ -1,7 +1,0 @@
-Django>=5.0
-djangorestframework
-requests
-pytest
-pytest-django
-ruff
-python-dotenv
