@@ -18,11 +18,6 @@ wynikiem będzie:
 ponieważ jest to najdłuższa sekwencja powtarzających się znaków.
 
 ---
-Aplikacja udostępnia dwa sposoby dostarczenia danych:
-
--POST - ciąg przekazywany bezpośrednio w żądaniu,
-
--GET - ciąg pobierany z zewnętrznego API.
 
 ## Podejście do rozwiązania
 
