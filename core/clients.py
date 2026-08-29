@@ -7,7 +7,8 @@ class ExternalAPIError(Exception):
 
 
 class ExternalAPIClient:
-    def get_data(self) -> str:
+    @staticmethod
+    def get_data() -> str:
         try:
             response = requests.get(
                 settings.EXTERNAL_API_URL,
