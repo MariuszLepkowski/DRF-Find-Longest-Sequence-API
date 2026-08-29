@@ -35,30 +35,6 @@ Taki podział pozwala testować poszczególne elementy niezależnie, bez wprowad
 
 ## Endpoint
 
-### POST /api/process/
-
-Przetwarza ciąg przekazany w żądaniu.
-
-**Request**
-
-```json
-{
-  "raw_sequence": "11199922233475599999"
-}
-```
-
-**Response**
-
-```json
-{
-  "input_sequence": "11199922233475599999",
-  "longest_sequence": "99999",
-  "length": 5
-}
-```
-
----
-
 ### GET /api/process/
 
 Pobiera dane z zewnętrznego API wskazanego przez zmienną środowiskową:
