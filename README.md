@@ -216,7 +216,6 @@ pytest
 * cały ciąg składający się z jednego znaku,
 * pusty ciąg,
 * wartość `None`,
-* poprawna obsługa endpointu POST,
 * walidacja błędnych danych wejściowych,
 * poprawna obsługa danych pobranych z zewnętrznego API,
 * obsługa błędów komunikacji z zewnętrznym API.
