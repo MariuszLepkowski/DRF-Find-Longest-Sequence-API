@@ -84,9 +84,11 @@ Przykład:
 SECRET_KEY=your-secret-key
 EXTERNAL_API_URL=https://twoj-webhook-site-url
 ```
+Przykładowy webhook można utworzyć na:
+https://webhook.site
 
 Na potrzeby demonstracji projektu można użyć przygotowanego webhooka:
-https://webhook.site/372c2317-2fdc-42ed-a0da-5f236f00fc94
+https://webhook.site/48c77743-13d6-4e49-887b-ab4f07126385
 
 SECRET_KEY można ustawić na dowolną wartość przeznaczoną do lokalnego środowiska demonstracyjnego.
 
